@@ -44,7 +44,7 @@ const App = () => {
 		if (response.results) {
 			setResults(response.results);
 			setFacet(response.facets[0]);
-			findSelectedFacet(response.facet[0]);
+			findSelectedFacet(response.facets[0]);
 			setTotalResults(response.totalResults);
 		} else {
 			console.log("No Results");
@@ -72,6 +72,7 @@ const App = () => {
 
 	const setStateFromURLParams = params => {
 		setQuery(params.get("q") || "");
+		setSelectedOption(params.get("searchFacet") || "");
 		setOffset(parseInt(params.get("offset")) || 0);
 	};
 
@@ -109,49 +110,58 @@ const App = () => {
 		const classArry = ["general-search",
 			darkMode ? "darkmode" : "",
 			isSearching ? "is-searching" : ""];
-
 		return classArry.join(" ");
 	}
+
 	return (
 		<main
 			ref={topRef}
 			className={mainClasses()}>
-			<h1 className="gs__title">Search / All Results</h1>
+			<h1 className="gs__title">Search / {selectedOption}</h1>
 			<h2 className="gs__sub-title">{query ? `${totalResults.toLocaleString()} for ${query}` : ""}</h2>
 			<SearchBar
 				query={query}
 				onChange={handleSearchQueryChange}
 			/>
 			<section className="gs__facets">
-				<span className="gs__section-title">Filter By:</span>
-				<div className="gs__facet-wrapper">
-					{facet.values.map(value => {
-						return (
-							<div
-								key={value.id}
-								className="gs__facet-container">
-								<input
-									type="radio"
-									checked={selectedOption === value.id}
-									name={value.id}
-									id={value.id}
-									onChange={e => handleSearchQueryChange("searchFacet", e)}
-								/>
-								<label
-									className="gs__facet-label"
-									htmlFor={value.id}>
-									{value.label} ({value.count})
-								</label>
-							</div>
-						)
-					})}
-				</div>
+				{facet.values.map(value => {
+					if (value.id === ""){
+						return;
+					}
+					return (
+						<div
+							onChange={e => handleSearchQueryChange("searchFacet", e)}
+							key={value.id}
+							className="gs__facet-container">
+							<input
+								defaultChecked={selectedOption === value.id}
+								type="radio"
+								name={facet.name}
+								id={value.id}
+								value={value.id}
+								className="gs__facet-input hidden-input"
+							/>
+							<label
+								tabIndex={0}
+								className="gs__facet-label"
+								htmlFor={value.id}>
+								{value.label} ({value.count.toLocaleString()})
+							</label>
+						</div>
+					)
+				})}
 			</section>
 			{results.length > 0 ? (
 				<section className="gs__results">
 					{results.map((resultObject,i) => {
 						return (
-							<div key={`hello-${i}`}>{resultObject.title}</div>
+							<a
+								className="gs__result"
+								key={`result-object-${i}`}
+								href={resultObject.url}>
+
+								<span className='gs__result-title'dangerouslySetInnerHTML={{__html: resultObject.title}}></span>
+							</a>
 						);
 					})}
 				</section>) :

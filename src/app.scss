@@ -135,45 +135,18 @@ h4 {
 	}
 }
 
-.gs__total-results {
-	font-weight: 600;
-}
-
-.gs__sort-results {
-	align-items: center;
-	display: flex;
-	flex-wrap: wrap;
-	grid-column-gap: $spacing-micro;
-	grid-row-gap: $spacing-micro;
-	justify-content: space-between;
-	margin-bottom: $spacing-xxs;
-}
-
-.gs__sort-control {
-	align-items: center;
-	display: flex;
-	grid-column-gap: $spacing-micro;
-	justify-content: flex-end;
-}
-
 .gs__results {
-	display: grid;
+	display: flex;
 	flex-wrap: wrap;
 	grid-column-gap: $spacing-micro;
 	grid-row-gap: $spacing-micro;
-	grid-template-columns: 1;
 	margin-bottom: $spacing-m;
 	max-width: 100%;
 	min-height: 50vh;
-	@media (min-width: 500px) {
-		grid-template-columns: repeat(2, 1fr);
-	}
-	@media (min-width: 700px) {
-		grid-template-columns: repeat(3, 1fr);
-	}
-	@media (min-width: 1000px) {
-		grid-template-columns: repeat(4, 1fr);
-	}
+}
+
+.gs__result {
+	flex-basis: 100%;
 }
 
 .gs__no-results {
@@ -183,83 +156,27 @@ h4 {
 	text-align: center;
 }
 
-.gs__facet-wrapper {
-	display: flex;
-	flex-wrap: wrap;
-	grid-column-gap: $spacing-xxs;
-	grid-row-gap: $spacing-xxs;
-	margin-bottom: $spacing-xxs;
-}
-
-.gs__facet-container {
-	color: $color-black;
-	flex-basis: 100%;
-	flex-grow: 1;
-	flex-shrink: 0;
-	@media (min-width: $bp-small-screen) {
-		flex-basis: 40%;
-	}
-}
-
-.gs__facet {
-	font-size: $textsize-xxs;
-}
-
 .gs__facets {
-	border-bottom: 1px solid $color-grey-600;
-	margin-bottom: $spacing-xxs;
-	padding-bottom: $spacing-xxs;
-}
-
-.gs__show-only {
-	margin-bottom: $spacing-xxs;
-}
-
-.gs__show-wrapper {
+	border-bottom: 1px solid currentColor;
 	display: flex;
 	flex-wrap: wrap;
 	grid-column-gap: $spacing-xxs;
 	grid-row-gap: $spacing-micro;
-	list-style: none;
-	margin: 0;
-	padding: 0;
+	margin-bottom: $spacing-xs;
+	padding-bottom: $spacing-xs;
 }
 
-.gs__show-option {
-	align-items: center;
-	cursor: pointer;
-	display: flex;
-	position: relative;
-	white-space: nowrap;
-}
-
-.hidden-input {
+.gs__facet-input {
 	display: none;
 }
 
-.gs__rpp {
-	align-items: center;
-	display: flex;
-	font-size: $textsize-s;
+.gs__facet-label {
+	cursor: pointer;
 	font-weight: 600;
-	grid-column-gap: $spacing-micro;
-	justify-content: center;
-	text-align: center;
-}
+	opacity: 0.5;
 
-.rpp__option {
-	@include button-reset();
-	font-size: $textsize-xs;
-	font-weight: 400;
-	padding: $spacing-micro;
-
-	&[disabled] {
-		opacity: 0.5;
-	}
-
-	&:focus {
-		background-color: $color-focus-background;
-		outline-color: $color-focus-state;
+	input:checked + & {
+		opacity: 1;
 	}
 }
 
