@@ -13,15 +13,18 @@ const placeholderCollectionItem = {
 
 let abortController = null;
 
+const initialUrl = new URL(`${window.location}`);
+const inititalParams = new URLSearchParams(initialUrl.search.slice(1));
+
 const App = () => {
 	const [searchParamsString, setSearchParamsString] = useState("");
 	const [isSearching, setIsSearching] = useState(false);
 
 	const [query, setQuery] = useState("");
+	const [prevQuery, setPrevQuery] = useState("");
 	const [facet, setFacet] = useState({values: []});
 	const [selectedOption, setSelectedOption] = useState("All Results");
 	const [offset, setOffset] = useState(0);
-	console.log(offset);
 	const [totalResults, setTotalResults] = useState(20001);
 
 	const [results, setResults] = useState(Array(10).fill(placeholderCollectionItem));
@@ -37,17 +40,24 @@ const App = () => {
 
 	const callAPI = async () => {
 		setIsSearching(true);
+		
 		abortController && abortController.abort();
 		abortController = new AbortController();
+	
 		const request = await fetch(`${searchAPI}${searchParamsString}`, { signal: abortController.signal });
 		const response = await request.json();
 		if (response.results) {
 			setResults(response.results);
-			setFacet(response.facets[0]);
+			if (prevQuery !== query) {
+				setPrevQuery(query);
+				setFacet(response.facets[0]);
+			}
 			findSelectedFacet(response.facets[0]);
 			setTotalResults(response.totalResults);
 		} else {
 			console.log("No Results");
+			setResults([]);
+			setTotalResults(0);
 		}
 	};
 
@@ -62,17 +72,34 @@ const App = () => {
 		}
 	}
 
-	const handleSearchQueryChange = (param, event) => {
+	const handleSearchQueryChange = event => {
+		setQuery(event.target.value);
+
 		const paramsObject = new URLSearchParams(searchParamsString);
-		paramsObject.set(param, event.target.value);
+		paramsObject.set("q", event.target.value);
+
 		paramsObject.set("offset", 0);
 		setOffset(0);
+		
 		setSearchParamsString(paramsObject.toString());
 	};
 
+	const handleSelectedOptionChange = event =>{
+		console.log(offset);
+		setSelectedOption(event.target.value);
+		console.log(event.target.value);
+		const paramsObject = new URLSearchParams(searchParamsString);
+		paramsObject.set("searchFacet", event.target.value);
+
+		paramsObject.set("offset", 0);
+		setOffset(0);
+		
+		setSearchParamsString(paramsObject.toString());
+	}
+
 	const setStateFromURLParams = params => {
 		setQuery(params.get("q") || "");
-		setSelectedOption(params.get("searchFacet") || "");
+		setSelectedOption(params.get("searchFacet") || "All Results");
 		setOffset(parseInt(params.get("offset")) || 0);
 	};
 
@@ -84,15 +111,16 @@ const App = () => {
 	};
 
 	useEffect(() => {
-		const url = new URL(`${window.location}`);
-		const params = new URLSearchParams(url.search.slice(1));
-		setSearchParamsString(params.toString());
-		setDarkMode(params.get("darkmode"));
+		setDarkMode(inititalParams.get("darkmode"));
+		setSearchParamsString(inititalParams.toString());
+		setStateFromURLParams(inititalParams);
 	}, []);
 
 	useEffect(() => {
+		const params = searchParamsString  ?
+			new URLSearchParams(searchParamsString) :
+			inititalParams;
 		searchCollection();
-		const params = new URLSearchParams(searchParamsString);
 		params["offset"] === "0" && params.delete("offset");
 		[...params.entries()].forEach(([key, value]) => {
 			if (key === "offset" && value === "0") {
@@ -103,7 +131,6 @@ const App = () => {
 			}
 		});
 		window.history.replaceState({}, '', `${location.pathname}?${params}`);
-		setStateFromURLParams(params);
 	}, [searchParamsString]);
 
 	const mainClasses = () => {
@@ -118,7 +145,7 @@ const App = () => {
 			ref={topRef}
 			className={mainClasses()}>
 			<h1 className="gs__title">Search / {selectedOption}</h1>
-			<h2 className="gs__sub-title">{query ? `${totalResults.toLocaleString()} for ${query}` : ""}</h2>
+			<h2 className="gs__sub-title">{query ? `${totalResults.toLocaleString()} results for ${query}` : ""}</h2>
 			<SearchBar
 				query={query}
 				onChange={handleSearchQueryChange}
@@ -130,7 +157,7 @@ const App = () => {
 					}
 					return (
 						<div
-							onChange={e => handleSearchQueryChange("searchFacet", e)}
+							onChange={handleSelectedOptionChange}
 							key={value.id}
 							className="gs__facet-container">
 							<input

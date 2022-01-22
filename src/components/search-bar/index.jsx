@@ -15,7 +15,7 @@ const SearchBar = ({onChange, query}) => {
 				debounceTimeout={400}
 				type="search"
 				value={query}
-				onChange={event => onChange("q", event)}
+				onChange={onChange}
 			/>
 		</section>
 	)
