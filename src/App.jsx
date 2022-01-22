@@ -5,9 +5,10 @@ import './app.scss';
 
 const searchAPI = 'https://www.metmuseum.org/api/search?';
 
-const placeholderCollectionItem = {
+const placeholderResult = {
 	"url": "",
-	"image": "https://www.metmuseum.org/content/img/placeholders/NoImageAvailableIcon.png",
+	dataFields: [],
+	"image": "https://www.metmuseum.org/assets/icons/ico-no-image.svg",
 	"artist": "",
 	"data": ""
 }
@@ -26,13 +27,13 @@ const App = () => {
 
 	const [searchParamsString, setSearchParamsString] = useState(initalPramsString);
 	const [query, setQuery] = useState(initialQuery);
-	const [prevQuery, setPrevQuery] = useState("");
+	const [prevQuery, setPrevQuery] = useState(null);
 	const [selectedOption, setSelectedOption] = useState(initialSelectedOption);
 	const [offset, setOffset] = useState(initialOffset);
 
 	const [facet, setFacet] = useState({values: []});
 	const [totalResults, setTotalResults] = useState(0);
-	const [results, setResults] = useState(Array(10).fill(placeholderCollectionItem));
+	const [results, setResults] = useState(Array(10).fill(placeholderResult));
 
 	const [darkMode, setDarkMode] = useState(false);
 
@@ -40,7 +41,7 @@ const App = () => {
 
 	const findSelectedFacet = facet => {
 		const selectedOption = facet.values.find(option => option.selected);
-		setSelectedOption(selectedOption.id);
+		setSelectedOption(selectedOption.id || "All Results");
 	};
 
 	const callAPI = async () => {
@@ -155,25 +156,15 @@ const App = () => {
 						return;
 					}
 					return (
-						<div
-							onChange={handleSelectedOptionChange}
+						<button
 							key={value.id}
-							className="gs__facet-container">
-							<input
-								defaultChecked={selectedOption === value.id}
-								type="radio"
-								name={facet.name}
-								id={value.id}
-								value={value.id}
-								className="gs__facet-input hidden-input"
-							/>
-							<label
-								tabIndex={0}
-								className="gs__facet-label"
-								htmlFor={value.id}>
-								{value.label} ({value.count.toLocaleString()})
-							</label>
-						</div>
+							className="gs__facet"
+							disabled={selectedOption === value.id}
+							value={value.id}
+							onKeyDown={event => event.key === 'Enter' && handleSelectedOptionChange(event)}
+							onClick={handleSelectedOptionChange}>
+							{value.label} ({value.count.toLocaleString()})
+						</button>
 					)
 				})}
 			</section>

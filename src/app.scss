@@ -145,10 +145,6 @@ h4 {
 	min-height: 50vh;
 }
 
-.gs__result {
-	flex-basis: 100%;
-}
-
 .gs__no-results {
 	font-size: $textsize-m;
 	font-weight: 600;
@@ -160,23 +156,30 @@ h4 {
 	border-bottom: 1px solid currentColor;
 	display: flex;
 	flex-wrap: wrap;
-	grid-column-gap: $spacing-xxs;
-	grid-row-gap: $spacing-micro;
+	grid-column-gap: 4px;
+	grid-row-gap: 4px;
 	margin-bottom: $spacing-xs;
 	padding-bottom: $spacing-xs;
 }
 
-.gs__facet-input {
-	display: none;
-}
 
-.gs__facet-label {
+.gs__facet {
+	@include button-reset();
 	cursor: pointer;
 	font-weight: 600;
 	opacity: 0.5;
+	padding: 4px;
 
-	input:checked + & {
+	&:disabled {
 		opacity: 1;
+	}
+
+	&:hover,
+	&:focus {
+		background-color: $color-focus-background;
+		color: $color-focus-state;
+		opacity: 1;
+		outline: none;
 	}
 }
 

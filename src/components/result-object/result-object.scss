@@ -1,63 +1,145 @@
 @import "~@metmuseum/marble/src/base/base";
 
-.gs__result {
-	border: 1px solid $color-black;
-	padding: $spacing-xs;
-}
-
-.result-object {
-	@include link-reset();
+.gs-result {
+	background-color: $color-grey-050;
+	border: 1px solid $color-grey-100;
 	border-radius: 4px;
-	padding: $spacing-micro;
+	box-shadow: $shadow-passive;
+	display: flex;
+	flex-basis: 100%;
+	flex-direction: column;
+	overflow: hidden;
+	text-decoration: none;
+	transition: all 0.3s;
+
+	@media (min-width: 550px) {
+		flex-direction: row;;
+	}
 
 	&:hover,
 	&:focus {
-		background-color: $color-focus-background;
-		outline: 0;
+		background-color: $color-white-050;
+		box-shadow: $shadow-active;
+		outline: none;
+	}
+
+	&.past-exhibition {
+		background-color: $color-grey-500;
 	}
 }
 
-.result-object__image-container {
-	align-items: center;
-	display: flex;
-	height: 300px;
-	justify-content: center;
+.gs-result__descriptor {
+	color: $color-grey-800;
+	font-weight: 600;
+	line-height: 1;
 	margin-bottom: $spacing-micro;
-	max-width: 100%;
-	position: relative;
 }
 
-.result-object__image {
-	max-height: 100%;
-	max-width: 100%;
-	position: absolute;
-}
-
-.result-object__info {
+.gs-result__image-wrapper {
+	align-items: center;
+	background: $color-grey-600;
 	display: flex;
-	flex-direction: column;
-	grid-row-gap: $spacing-micro;
-	text-align: center;
+	flex-grow: 0;
+	flex-shrink: 0;
+	justify-content: center;
+	width: 100%;
+
+	@media (min-width: 550px) {
+		max-width: 250px;
+		width: 50%;
+	}
 }
 
-.result-object__title {
-	@include typography-h5();
-	@include line-clamp(2);
-	display: -webkit-box; /* stylelint-disable-line */
-	height: 2.2em;
-	line-height: 1.1;
-	overflow: hidden;
+.gs-result__image {
+	height: auto;
+	max-width: 100%;
+	width: 100%;
 
-	.result-object:focus &,
-	.result-object:hover & {
+	&[src="https://www.metmuseum.org/assets/icons/ico-no-image.svg"] {
+		filter: brightness(0.8);
+	}
+
+
+	.Primer:hover &,
+	.Primer:focus & {
+		animation-direction: alternate;
+		animation-duration: 5s;
+		animation-iteration-count: infinite;
+		animation-name: colorShift;
+		animation-timing-function: ease;
+	}
+}
+
+.gs-result__body {
+	flex-basis: 100%;
+	padding: $spacing-xxs;
+}
+
+.gs-result__result-title {
+	display: inline-block;
+	font-size: $textsize-m;
+	line-height: 1;
+	margin-bottom: $spacing-micro;
+	text-decoration: none;
+
+	.gs-result:hover &,
+	.gs-result:focus & {
 		text-decoration: underline;
 	}
 }
 
-.result-object__attribution {
-	@include line-clamp(2);
-	display: -webkit-box; /* stylelint-disable-line */
-	height: 2em;
-	line-height: 1;
-	overflow: hidden;
+.gs-result__titles {
+	margin-bottom: $spacing-micro;
+}
+
+.gs-results__dates {
+	font-size: $textsize-xs;
+	font-weight: 600;
+}
+
+.gs-result__result-teaser {
+	font-size: $textsize-xs;
+	line-height: 1.333;
+
+	br {
+		content: "";
+		display: block;
+		margin: $spacing-micro;
+	}
+
+	br + br {
+		display: none;
+	}
+
+	p {
+		margin: 0 0 $spacing-micro;
+	}
+}
+
+.gs-result__data {
+	line-height: 1.1;
+}
+
+.gs-result__data-title {
+	font-size: $textsize-xs;
+	font-weight: 600;
+	margin-right: 4px;
+}
+
+.gs-result__data-value {
+	font-size: $textsize-xs;
+}
+
+@keyframes colorShift {
+	0% {
+		filter: brightness(1);
+	}
+
+	33% {
+		filter: brightness(1.1);
+	}
+
+	66% {
+		filter: brightness(0.9);
+	}
 }
