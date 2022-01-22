@@ -1,0 +1,38 @@
+.object-search__input {
+	background: linear-gradient(-45deg, $color-green-good-news-400, $color-green-good-news-600, $color-white, $color-white);
+	background-position: 30% 50%;
+	background-size: 400% 400%;
+	border: 2px solid currentColor;
+	border-radius: 50px;
+	box-sizing: border-box;
+	color: $color-black;
+	flex-basis: 100%;
+	min-width: 0;
+	padding: $spacing-micro;
+	text-overflow: ellipsis;
+
+	&:focus {
+		background: $color-focus-background;
+		color: currentColor;
+		outline-color: $color-focus-state;
+	}
+
+	.is-searching & {
+		animation: gradient 10s linear infinite;
+	}
+}
+
+
+@keyframes gradient {
+	0% {
+		background-position: 30% 50%;
+	}
+
+	50% {
+		background-position: 100% 50%;
+	}
+
+	100% {
+		background-position: 30% 50%;
+	}
+}
