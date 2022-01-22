@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SearchBar from './components/search-bar';
+import ResultObject from './components/result-object';
 import './app.scss';
 
 const searchAPI = 'https://www.metmuseum.org/api/search?';
@@ -15,18 +16,22 @@ let abortController = null;
 
 const initialUrl = new URL(`${window.location}`);
 const inititalParams = new URLSearchParams(initialUrl.search.slice(1));
+const initalPramsString = inititalParams.toString();
+const initialQuery = inititalParams.get("q") || "";
+const initialSelectedOption = inititalParams.get("searchFacet") || "All Results";
+const initialOffset = inititalParams.get("offset") || 0;
 
 const App = () => {
-	const [searchParamsString, setSearchParamsString] = useState("");
 	const [isSearching, setIsSearching] = useState(false);
 
-	const [query, setQuery] = useState("");
+	const [searchParamsString, setSearchParamsString] = useState(initalPramsString);
+	const [query, setQuery] = useState(initialQuery);
 	const [prevQuery, setPrevQuery] = useState("");
-	const [facet, setFacet] = useState({values: []});
-	const [selectedOption, setSelectedOption] = useState("All Results");
-	const [offset, setOffset] = useState(0);
-	const [totalResults, setTotalResults] = useState(20001);
+	const [selectedOption, setSelectedOption] = useState(initialSelectedOption);
+	const [offset, setOffset] = useState(initialOffset);
 
+	const [facet, setFacet] = useState({values: []});
+	const [totalResults, setTotalResults] = useState(0);
 	const [results, setResults] = useState(Array(10).fill(placeholderCollectionItem));
 
 	const [darkMode, setDarkMode] = useState(false);
@@ -48,6 +53,7 @@ const App = () => {
 		const response = await request.json();
 		if (response.results) {
 			setResults(response.results);
+
 			if (prevQuery !== query) {
 				setPrevQuery(query);
 				setFacet(response.facets[0]);
@@ -85,9 +91,7 @@ const App = () => {
 	};
 
 	const handleSelectedOptionChange = event =>{
-		console.log(offset);
 		setSelectedOption(event.target.value);
-		console.log(event.target.value);
 		const paramsObject = new URLSearchParams(searchParamsString);
 		paramsObject.set("searchFacet", event.target.value);
 
@@ -97,12 +101,6 @@ const App = () => {
 		setSearchParamsString(paramsObject.toString());
 	}
 
-	const setStateFromURLParams = params => {
-		setQuery(params.get("q") || "");
-		setSelectedOption(params.get("searchFacet") || "All Results");
-		setOffset(parseInt(params.get("offset")) || 0);
-	};
-
 	const scrollToRef = ref => {
 		ref.current.scrollIntoView({
 			block: 'start',
@@ -110,17 +108,8 @@ const App = () => {
 		});
 	};
 
-	useEffect(() => {
-		setDarkMode(inititalParams.get("darkmode"));
-		setSearchParamsString(inititalParams.toString());
-		setStateFromURLParams(inititalParams);
-	}, []);
-
-	useEffect(() => {
-		const params = searchParamsString  ?
-			new URLSearchParams(searchParamsString) :
-			inititalParams;
-		searchCollection();
+	const updateURL = () => {
+		const params = new URLSearchParams(searchParamsString);
 		params["offset"] === "0" && params.delete("offset");
 		[...params.entries()].forEach(([key, value]) => {
 			if (key === "offset" && value === "0") {
@@ -131,6 +120,15 @@ const App = () => {
 			}
 		});
 		window.history.replaceState({}, '', `${location.pathname}?${params}`);
+	};
+
+	useEffect(() => {
+		setDarkMode(inititalParams.get("darkmode"));
+	}, []);
+
+	useEffect(() => {
+		searchCollection();
+		updateURL();
 	}, [searchParamsString]);
 
 	const mainClasses = () => {
@@ -142,10 +140,11 @@ const App = () => {
 
 	return (
 		<main
+			offset={offset}
 			ref={topRef}
 			className={mainClasses()}>
 			<h1 className="gs__title">Search / {selectedOption}</h1>
-			<h2 className="gs__sub-title">{query ? `${totalResults.toLocaleString()} results for ${query}` : ""}</h2>
+			<h2 className="gs__sub-title">{query && totalResults ? `${totalResults.toLocaleString()} results for ${query}` : ""}</h2>
 			<SearchBar
 				query={query}
 				onChange={handleSearchQueryChange}
@@ -180,15 +179,12 @@ const App = () => {
 			</section>
 			{results.length > 0 ? (
 				<section className="gs__results">
-					{results.map((resultObject,i) => {
+					{results.map((result,i) => {
 						return (
-							<a
-								className="gs__result"
-								key={`result-object-${i}`}
-								href={resultObject.url}>
-
-								<span className='gs__result-title'dangerouslySetInnerHTML={{__html: resultObject.title}}></span>
-							</a>
+							<ResultObject
+								key={`result-${i}`}
+								result={result}
+							/>
 						);
 					})}
 				</section>) :

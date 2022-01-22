@@ -1,5 +1,10 @@
 @import "~@metmuseum/marble/src/base/base";
 
+.gs__result {
+	border: 1px solid $color-black;
+	padding: $spacing-xs;
+}
+
 .result-object {
 	@include link-reset();
 	border-radius: 4px;
