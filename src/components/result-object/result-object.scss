@@ -12,7 +12,7 @@
 	text-decoration: none;
 	transition: all 0.3s;
 
-	@media (min-width: 550px) {
+	@media (min-width: $bp-gs) {
 		flex-direction: row;;
 	}
 
@@ -62,6 +62,7 @@
 	line-height: 1;
 	margin-bottom: $spacing-micro;
 	text-transform: capitalize;
+	
 	.darkmode & {
 		color: $color-white;
 	}

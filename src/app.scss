@@ -1,11 +1,9 @@
+$bp-gs: 550px;
 @import "~@metmuseum/marble/src/base/base";
 @import "~@metmuseum/marble/src/global/accessibility";
 @import "./fonts/font-declarations";
 @import "./components/result-object/result-object";
 @import "./components/search-bar/search-bar";
-
-
-$bp-small-screen: 800px;
 
 * {
 	box-sizing: border-box;
@@ -153,15 +151,58 @@ h4 {
 }
 
 .gs__facets {
-	border-bottom: 1px solid currentColor;
 	display: flex;
 	flex-wrap: wrap;
 	grid-column-gap: 4px;
 	grid-row-gap: 4px;
-	margin-bottom: $spacing-xs;
-	padding-bottom: $spacing-xs;
+	margin-bottom: $spacing-micro;
+	margin-left: -$spacing-component-margin;
+	margin-right: -$spacing-component-margin;
+	overflow: auto;
+	padding-bottom: $spacing-micro;
+	@media (min-width: $bp-gs) {
+		border-bottom: 1px solid $color-grey-200;
+		margin: 0 0 $spacing-xs;
+		padding-bottom: $spacing-xs;
+	}
 }
 
+.gs__facets-wrapper {
+	display: flex;
+	grid-column-gap: $spacing-xxs;
+	margin-left: $spacing-component-margin;
+	margin-right: $spacing-component-margin;
+	white-space: nowrap;
+	@media (min-width: $bp-gs) {
+		flex-wrap: wrap;
+		margin: 0;
+		white-space: wrap;
+	}
+}
+
+.gs__facets::-webkit-scrollbar {
+	background: $color-white;
+	border-radius: 10px;
+	height: 5px;
+	width: 5px;
+
+	.darkmode & {
+		background-color: $color-grey-900;
+	}
+}
+
+.gs__facets::-webkit-scrollbar-thumb {
+	background-color: $color-grey-700;
+	border-left: $spacing-component-margin solid $color-white;
+	border-radius: 50px;
+	border-right: $spacing-component-margin solid $color-white;
+	width: calc(200px + 2* #{$spacing-component-margin});
+
+	.darkmode & {
+		background-color: $color-white;
+		border-color: $color-grey-900;
+	}
+}
 
 .gs__facet {
 	@include button-reset();
