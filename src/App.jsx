@@ -6,21 +6,21 @@ import './app.scss';
 const searchAPI = 'https://www.metmuseum.org/api/search?';
 
 const placeholderResult = {
-	"url": "",
+	url: "",
 	dataFields: [],
-	"image": "https://www.metmuseum.org/assets/icons/ico-no-image.svg",
-	"artist": "",
-	"data": ""
+	image: "https://www.metmuseum.org/assets/icons/ico-no-image.svg",
+	teaser: "",
+	data: ""
 }
 
 let abortController = null;
 
 const initialUrl = new URL(`${window.location}`);
 const inititalParams = new URLSearchParams(initialUrl.search.slice(1));
+inititalParams.set("page", 1);
 const initalPramsString = inititalParams.toString();
 const initialQuery = inititalParams.get("q") || "";
 const initialSelectedOption = inititalParams.get("searchFacet") || "All Results";
-const initialOffset = inititalParams.get("offset") || 0;
 
 const App = () => {
 	const [isSearching, setIsSearching] = useState(false);
@@ -29,7 +29,7 @@ const App = () => {
 	const [query, setQuery] = useState(initialQuery);
 	const [prevQuery, setPrevQuery] = useState(null);
 	const [selectedOption, setSelectedOption] = useState(initialSelectedOption);
-	const [offset, setOffset] = useState(initialOffset);
+	const [page, setPage] = useState(1);
 
 	const [facet, setFacet] = useState({values: []});
 	const [totalResults, setTotalResults] = useState(0);
@@ -37,13 +37,24 @@ const App = () => {
 
 	const [darkMode, setDarkMode] = useState(false);
 
-	const topRef = React.createRef();
-
-	const findSelectedFacet = facet => {
-		const selectedOption = facet.values.find(option => option.selected);
-		setSelectedOption(selectedOption.id || "All Results");
+	const handleResults = responseData => {
+		if (page === 1) {
+			setResults(responseData.results);
+			//Only Fetch new facets if the Query changes.
+			if (prevQuery !== query) {
+				//Order them by total results per category
+				responseData.facets[0].values.sort((a, b) => b.count - a.count);
+				setFacet(responseData.facets[0]);
+				setPrevQuery(query);
+			}
+			setSelectedOption(responseData.request.searchFacet);
+			setTotalResults(responseData.totalResults);
+		} else {
+			const oldResults = results;
+			setResults(oldResults.concat(responseData.results));
+		}
+		
 	};
-
 	const callAPI = async () => {
 		setIsSearching(true);
 		
@@ -52,15 +63,9 @@ const App = () => {
 	
 		const request = await fetch(`${searchAPI}${searchParamsString}`, { signal: abortController.signal });
 		const response = await request.json();
-		if (response.results) {
-			setResults(response.results);
 
-			if (prevQuery !== query) {
-				setPrevQuery(query);
-				setFacet(response.facets[0]);
-			}
-			findSelectedFacet(response.facets[0]);
-			setTotalResults(response.totalResults);
+		if (response.results) {
+			handleResults(response);
 		} else {
 			console.log("No Results");
 			setResults([]);
@@ -85,9 +90,8 @@ const App = () => {
 		const paramsObject = new URLSearchParams(searchParamsString);
 		paramsObject.set("q", event.target.value);
 
-		paramsObject.set("offset", 0);
-		setOffset(0);
-		
+		setPage(1);
+		paramsObject.set("page", 1);
 		setSearchParamsString(paramsObject.toString());
 	};
 
@@ -96,26 +100,22 @@ const App = () => {
 		const paramsObject = new URLSearchParams(searchParamsString);
 		paramsObject.set("searchFacet", event.target.value);
 
-		paramsObject.set("offset", 0);
-		setOffset(0);
-		
+		setPage(1);
+		paramsObject.set("page", 1);
 		setSearchParamsString(paramsObject.toString());
 	}
 
-	const scrollToRef = ref => {
-		ref.current.scrollIntoView({
-			block: 'start',
-			behavior: 'smooth'
-		});
-	};
+	const handleShowMoreResults = () => {
+		const newPage = page + 1;
+		setPage(newPage);
 
+		const paramsObject = new URLSearchParams(searchParamsString);
+		paramsObject.set("page", newPage);
+		setSearchParamsString(paramsObject.toString());
+	}
 	const updateURL = () => {
 		const params = new URLSearchParams(searchParamsString);
-		params["offset"] === "0" && params.delete("offset");
 		[...params.entries()].forEach(([key, value]) => {
-			if (key === "offset" && value === "0") {
-				params.delete(key);
-			}
 			if (!value) {
 				params.delete(key);
 			}
@@ -141,8 +141,6 @@ const App = () => {
 
 	return (
 		<main
-			offset={offset}
-			ref={topRef}
 			className={mainClasses()}>
 			<h1 className="gs__title">Search / {selectedOption}</h1>
 			<h2 className="gs__sub-title">{query && totalResults ? `${totalResults.toLocaleString()} results for ${query}` : ""}</h2>
@@ -184,14 +182,13 @@ const App = () => {
 				</section>)
 			}
 			<section className="gs__pagination">
-				<div className="rtt__wrapper">
-					<button
-						onKeyDown={event => event.key === 'Enter' && scrollToRef(topRef)}
-						onClick={() => scrollToRef(topRef)}
-						className="gs__rtt-button">
-						Return To Top
-					</button>
-				</div>
+				{totalResults > page * 10 &&
+				(<button
+					onKeyDown={event => event.key === 'Enter' && handleShowMoreResults()}
+					onClick={handleShowMoreResults}
+					className="gs__load-button">
+					Show More
+				</button>)}
 			</section>
 		</main>
 	)

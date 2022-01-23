@@ -26,14 +26,30 @@
 	&.past-exhibition {
 		background-color: $color-grey-500;
 	}
+
 	&.best-bet {
 		background-color: $color-grey-900;
+		color: $color-white;
+
+		.darkmode & { /* stylelint-disable */
+			background-color: $color-white-050;
+			color: $color-grey-900;
+		} /* stylelint-enable */
+	}
+	
+	.darkmode & {
+		background-color: $color-grey-800;
+		border: 1px solid $color-grey-800;
 		color: $color-white;
 	}
 }
 
 .best-bet__title {
 	color: #f5deb3;
+	
+	.darkmode & {
+		color: #c28d2a;
+	}
 }
 
 .gs-result__descriptor {
@@ -109,8 +125,6 @@
 .gs-result__result-teaser {
 	font-size: $textsize-xs;
 	line-height: 1.333;
-	max-height: 11em;
-	overflow: hidden;
 
 	br {
 		content: "";

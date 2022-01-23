@@ -2,21 +2,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const ResultObject = ({result}) => {
-	const imageURL= result.image.includes("metmuseum.org") ?
-		result.image :
-		`https://metmuseum.org${result.image}`;
+	const isBestBet = result.bestBet ? (<span className="best-bet__title">Best Bet</span>) : "";
+	const isPast = result.status === "Past Exhibition" ? "past-exhibition" : "";
+	const teaser = (result.teaser && result.teaser.length > 400) ? result.teaser.substring(0, 400) + `...` : result.teaser;
+	
+	const imageURL= result.image ?
+		result.image.includes("http") ?
+			result.image :
+			`https://metmuseum.org${result.image}` :
+		`https://www.metmuseum.org/assets/icons/ico-no-image.svg`;
 
-	const url= result.url.includes("metmuseum.org") ?
+	const url = result.url.includes("http") ?
 		result.url :
 		`https://metmuseum.org${result.url}`;
 
 	const cardText = (
-		<div className='gs-result__result-teaser'dangerouslySetInnerHTML={{__html: result.teaser}}/>
+		<div className='gs-result__result-teaser'dangerouslySetInnerHTML={{__html: teaser}}/>
 	);
 
-	const isBestBet = result.bestBet ? (<span className="best-bet__title">Best Bet</span>) : "";
-
-	const isPast = result.status === "Past Exhibition" ? "past-exhibition" : "";
 	const dataFieldText = (
 		<div className='gs-result__data-container'>
 			{result.dataFields.map(data => {

@@ -181,15 +181,23 @@ h4 {
 		opacity: 1;
 		outline: none;
 	}
+
+	.darkmode & { /* stylelint-disable */
+		&:hover,
+		&:focus { 
+			background-color: $color-white-opaque-30;
+			color: $color-white;
+		}
+	} /* stylelint-enable */
 }
 
-.rtt__wrapper {
+.gs__pagination {
 	display: flex;
 	justify-content: center;
 	padding: $spacing-micro;
 }
 
-.gs__rtt-button {
+.gs__load-button {
 	@include button-reset();
 	border: 1px solid currentColor;
 	font-size: $textsize-xs;
@@ -201,3 +209,4 @@ h4 {
 		outline-color: $color-focus-state;
 	}
 }
+
