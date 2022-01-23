@@ -47,7 +47,7 @@ const App = () => {
 				setFacet(responseData.facets[0]);
 				setPrevQuery(query);
 			}
-			setSelectedOption(responseData.request.searchFacet);
+			setSelectedOption(responseData.request.searchFacet || "All Results");
 			setTotalResults(responseData.totalResults);
 		} else {
 			const oldResults = results;
