@@ -70,6 +70,7 @@ const App = () => {
 			console.log("No Results");
 			setResults([]);
 			setTotalResults(0);
+			setFacet({values: []});
 		}
 	};
 
