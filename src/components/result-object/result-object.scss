@@ -23,9 +23,13 @@
 		outline: none;
 	}
 
-	&.past-exhibition {
+	&.past-exhibition { /* stylelint-disable */
 		background-color: $color-grey-500;
-	}
+
+		.darkmode & {
+			background-color: $color-black;
+		}
+	} /* stylelint-enable */
 
 	&.best-bet {
 		background-color: $color-grey-900;
@@ -58,6 +62,9 @@
 	line-height: 1;
 	margin-bottom: $spacing-micro;
 	text-transform: capitalize;
+	.darkmode & {
+		color: $color-white;
+	}
 }
 
 .gs-result__image-wrapper {

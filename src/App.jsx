@@ -116,7 +116,7 @@ const App = () => {
 	const updateURL = () => {
 		const params = new URLSearchParams(searchParamsString);
 		[...params.entries()].forEach(([key, value]) => {
-			if (!value) {
+			if (!value || value === "All Results") {
 				params.delete(key);
 			}
 		});
