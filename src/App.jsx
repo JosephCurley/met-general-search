@@ -115,11 +115,9 @@ const App = () => {
 	}
 	const updateURL = () => {
 		const params = new URLSearchParams(searchParamsString);
-		[...params.entries()].forEach(([key, value]) => {
-			if (!value || value === "All Results") {
-				params.delete(key);
-			}
-		});
+		params.get("page") === "1" && params.delete("page");
+		params.get("searchFacet") === "All Results" && params.delete("searchFacet");
+		params.get("q") === "" && params.delete("q");
 		window.history.replaceState({}, '', `${location.pathname}?${params}`);
 	};
 
