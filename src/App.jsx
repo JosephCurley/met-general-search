@@ -149,22 +149,31 @@ const App = () => {
 				onChange={handleSearchQueryChange}
 			/>
 			<section className="gs__facets">
-				{facet.values.map(value => {
-					if (value.id === ""){
-						return;
-					}
-					return (
-						<button
-							key={value.id}
-							className="gs__facet"
-							disabled={selectedOption === value.id}
-							value={value.id}
-							onKeyDown={event => event.key === 'Enter' && handleSelectedOptionChange(event)}
-							onClick={handleSelectedOptionChange}>
-							{value.label} ({value.count.toLocaleString()})
-						</button>
-					)
-				})}
+				<div className="search-type__wrapper gs-select__wrapper">
+					<label
+						className="screen-reader-only"
+						htmlFor="search-type">Search Type:
+					</label>
+					<select
+						className="gs-select"
+						name="searchFacet"
+						id="searchFacet"
+						value={selectedOption}
+						onChange={handleSelectedOptionChange}>
+						{facet.values.map(value => {
+							if (value.id === ""){
+								return;
+							}
+							return (
+								<option
+									key={value.value}
+									value={value.id}>
+									{value.label} ({value.count.toLocaleString()})
+								</option>
+							)
+						})}
+					</select>
+				</div>
 			</section>
 			{results.length > 0 ? (
 				<section className="gs__results">
