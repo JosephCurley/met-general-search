@@ -14,9 +14,11 @@ const ResultObject = ({result}) => {
 		<div className='gs-result__result-teaser'dangerouslySetInnerHTML={{__html: result.teaser}}/>
 	);
 
+	const isBestBet = result.bestBet ? (<span className="best-bet__title">Best Bet</span>) : "";
+
 	const isPast = result.status === "Past Exhibition" ? "past-exhibition" : "";
-	const eventCardText = (
-		<div className='gs-result__event-result'>
+	const dataFieldText = (
+		<div className='gs-result__data-container'>
 			{result.dataFields.map(data => {
 				return (
 					<div className="gs-result__data" key={`data-${data.name}`}>
@@ -33,7 +35,7 @@ const ResultObject = ({result}) => {
 	
 	return (
 		<a
-			className={`gs-result ${result.buttonText} ${isPast}`}
+			className={`gs-result ${result.buttonText} ${isPast} ${result.bestBet && `best-bet`}`}
 			href={url}>
 			<div
 				className="gs-result__image-wrapper">
@@ -50,14 +52,17 @@ const ResultObject = ({result}) => {
 			</div>
 			<div className="gs-result__body">
 				<div className="gs-result__titles">
-					<div className='gs-result__descriptor'>{result.status ? result.status : result.buttonText} </div>
+					<div className='gs-result__descriptor'>
+						{isBestBet} {result.status ? result.status : result.buttonText}
+					</div>
 					<span
 						className='gs-result__result-title'
 						dangerouslySetInnerHTML={{__html: result.title}}
 					/>
 					{result.dates && <div className="gs-results__dates" dangerouslySetInnerHTML={{__html: result.dates}}/>}
 				</div>
-				{ result.dataFields.length > 0 ? eventCardText : cardText }
+				{ result.dataFields.length > 0 && dataFieldText }
+				{result.buttonText !== "Artwork" && cardText }
 			</div>
 		</a>
 	);

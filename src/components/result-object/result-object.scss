@@ -26,6 +26,14 @@
 	&.past-exhibition {
 		background-color: $color-grey-500;
 	}
+	&.best-bet {
+		background-color: $color-grey-900;
+		color: $color-white;
+	}
+}
+
+.best-bet__title {
+	color: #f5deb3;
 }
 
 .gs-result__descriptor {
@@ -33,6 +41,7 @@
 	font-weight: 600;
 	line-height: 1;
 	margin-bottom: $spacing-micro;
+	text-transform: capitalize;
 }
 
 .gs-result__image-wrapper {
@@ -100,6 +109,8 @@
 .gs-result__result-teaser {
 	font-size: $textsize-xs;
 	line-height: 1.333;
+	max-height: 11em;
+	overflow: hidden;
 
 	br {
 		content: "";
@@ -114,6 +125,10 @@
 	p {
 		margin: 0 0 $spacing-micro;
 	}
+}
+
+.gs-result__data-container {
+	margin-bottom: $spacing-micro;
 }
 
 .gs-result__data {
