@@ -3,8 +3,8 @@ $bp-small-screen: 800px;
 @import "~@metmuseum/marble/src/base/base";
 @import "~@metmuseum/marble/src/global/accessibility";
 @import "./fonts/font-declarations";
-@import "./components/result-object/result-object";
 @import "./components/search-bar/search-bar";
+@import "./components/general-results/general-results";
 
 * {
 	box-sizing: border-box;

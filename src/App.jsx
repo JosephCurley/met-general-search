@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import SearchBar from './components/search-bar';
-import ResultObject from './components/result-object';
 import './app.scss';
+import GeneralResults from './components/general-results';
 
-const searchAPI = 'https://www.metmuseum.org/api/search?';
 
-const placeholderResult = {
+
+const generalSearchAPI = 'https://www.metmuseum.org/api/search?';
+
+const placeholderGeneralResult = {
 	url: "",
 	dataFields: [],
 	image: "https://www.metmuseum.org/assets/icons/ico-no-image.svg",
@@ -13,7 +15,7 @@ const placeholderResult = {
 	data: ""
 };
 
-const placeholderFacet = {
+const placeholderGeneralFacet = {
 	values: []
 };
 
@@ -43,9 +45,9 @@ const App = () => {
 	const [selectedOption, setSelectedOption] = useState(initialSelectedOption);
 	const [page, setPage] = useState(1);
 
-	const [facet, setFacet] = useState(placeholderFacet);
+	const [facet, setFacet] = useState(placeholderGeneralFacet);
 	const [totalResults, setTotalResults] = useState(0);
-	const [results, setResults] = useState(Array(10).fill(placeholderResult));
+	const [results, setResults] = useState(Array(10).fill(placeholderGeneralResult));
 	const [darkMode] = useState(isDarkMode);
 
 	const handleResults = responseData => {
@@ -73,7 +75,7 @@ const App = () => {
 		abortController && abortController.abort();
 		abortController = new AbortController();
 	
-		const request = await fetch(`${searchAPI}${searchParamsString}`, { signal: abortController.signal });
+		const request = await fetch(`${generalSearchAPI}${searchParamsString}`, { signal: abortController.signal });
 		const response = await request.json();
 
 		if (response.results) {
@@ -82,7 +84,7 @@ const App = () => {
 			console.log("No Results");
 			setResults([]);
 			setTotalResults(0);
-			setFacet(placeholderFacet);
+			setFacet(placeholderGeneralFacet);
 		}
 	};
 
@@ -127,28 +129,6 @@ const App = () => {
 		setSearchParamsString(paramsObject.toString());
 	};
 
-	const showNotificationBanner = () => {
-		if (selectedOption === "Events" ||selectedOption === "Art") {
-			const link = selectedOption === "Events" ?
-				(<a
-					title={`Search for events ${query && `related to ${query}`}`}
-					href={`https://metmuseum.org/events/whats-on?searchText=${query}`}>
-					Advanced Event Search
-				</a>) :
-				(<a
-					title={`Search our collection ${query && `for ${query}`}`}
-					href={`https://met-collection-search.vercel.app/?q=${query}`}>
-					Advanced Collection Search
-				</a>);
-			return (
-				<section className="gs__notification">
-					Need to refine your search? Use our {link} for more options and filters.
-				</section>
-			);
-		} else {
-			return <section className="gs__notification"/>
-		}
-	};
 	const updateURL = () => {
 		const params = new URLSearchParams(searchParamsString);
 		//Page isn't useful for the user to ever see in their URL.
@@ -173,13 +153,6 @@ const App = () => {
 	return (
 		<main
 			className={mainClasses()}>
-			<h1 className="gs__title">Search / {selectedOption}</h1>
-			<h2 className="gs__sub-title">{query && totalResults ? `${totalResults.toLocaleString()} results for ${query}` : ""}</h2>
-			<SearchBar
-				query={query}
-				selectedOption={selectedOption}
-				onChange={handleSearchQueryChange}
-			/>
 			<section className="gs__facets">
 				{facet.values.map(value => {
 					if (value.id === ""){
@@ -198,31 +171,19 @@ const App = () => {
 					)
 				})}
 			</section>
-			{showNotificationBanner()}
-			{results.length > 0 ? (
-				<section className="gs__results">
-					{results.map((result,i) => {
-						return (
-							<ResultObject
-								key={`result-${i}`}
-								result={result}
-							/>
-						);
-					})}
-				</section>) :
-				(<section className="gs__no-results">
-					There are no results found. Please try another search.
-				</section>)
-			}
-			<section className="gs__pagination">
-				{totalResults > page * 10 &&
-				(<button
-					onKeyDown={event => event.key === 'Enter' && handleShowMoreResults()}
-					onClick={handleShowMoreResults}
-					className="gs__load-button">
-					Show More
-				</button>)}
-			</section>
+			<h1 className="gs__title">Search / {selectedOption}</h1>
+			<h2 className="gs__sub-title">{query && totalResults ? `${totalResults.toLocaleString()} results for ${query}` : ""}</h2>
+			<SearchBar
+				query={query}
+				selectedOption={selectedOption}
+				onChange={handleSearchQueryChange}
+			/>
+			<GeneralResults
+				results={results}
+				totalResults={totalResults}
+				page={page}
+				handleShowMoreResults={handleShowMoreResults}
+			/>
 		</main>
 	)
 };

@@ -1,0 +1,58 @@
+@import "~@metmuseum/marble/src/base/base";
+
+.result-object {
+	@include link-reset();
+	border-radius: 4px;
+	padding: $spacing-micro;
+
+	&:hover,
+	&:focus {
+		background-color: $color-focus-background;
+		outline: 0;
+	}
+}
+
+.result-object__image-container {
+	align-items: center;
+	display: flex;
+	height: 300px;
+	justify-content: center;
+	margin-bottom: $spacing-micro;
+	max-width: 100%;
+	position: relative;
+}
+
+.result-object__image {
+	max-height: 100%;
+	max-width: 100%;
+	position: absolute;
+}
+
+.result-object__info {
+	display: flex;
+	flex-direction: column;
+	grid-row-gap: $spacing-micro;
+	text-align: center;
+}
+
+.result-object__title {
+	@include typography-h5();
+	@include line-clamp(2);
+	display: -webkit-box; /* stylelint-disable-line */
+	height: 2.2em;
+	line-height: 1.1;
+	overflow: hidden;
+
+	.result-object:focus &,
+	.result-object:hover & {
+		text-decoration: underline;
+	}
+}
+
+.result-object__attribution {
+	@include line-clamp(2);
+	display: -webkit-box; /* stylelint-disable-line */
+	height: 2em;
+	line-height: 1;
+	overflow: hidden;
+}
