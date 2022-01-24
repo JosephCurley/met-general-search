@@ -17,7 +17,7 @@ const placeholderFacet = {
 	values: []
 };
 
-const defaultSelectedOption = "All Read";
+const defaultSelectedOption = "All Results";
 
 let abortController = null;
 
