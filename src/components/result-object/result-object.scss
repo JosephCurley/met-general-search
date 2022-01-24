@@ -155,6 +155,11 @@
 
 .gs-result__data {
 	line-height: 1.1;
+
+	a:hover,
+	a:focus {
+		background-color: $color-focus-background;
+	}
 }
 
 .gs-result__data-title {
