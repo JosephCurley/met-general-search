@@ -9,6 +9,15 @@ $bp-gs: 550px;
 	box-sizing: border-box;
 }
 
+ /* stylelint-disable */
+html,
+body,
+#app,
+.general-search {
+	min-height: 100%;
+}
+ /* stylelint-enable */
+
 body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -224,7 +233,7 @@ h4 {
 
 	.darkmode & { /* stylelint-disable */
 		&:hover,
-		&:focus { 
+		&:focus {
 			background-color: $color-white-opaque-30;
 			color: $color-white;
 		}
@@ -250,3 +259,21 @@ h4 {
 	}
 }
 
+.gs__notification {
+	background-color: $color-grey-900;
+	border-radius: 4px;
+	color: $color-white;
+	font-size: $textsize-xs;
+	margin-bottom: $spacing-xxs;
+	padding: $spacing-xxs;
+	transition: padding-top 0.17s ease-out, padding-bottom 0.17s ease-out;
+
+	&:empty {
+		padding: 0;
+	}
+
+	.darkmode & {
+		background-color: $color-white-050;
+		color: $color-grey-900;
+	}
+}
