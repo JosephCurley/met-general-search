@@ -116,7 +116,7 @@ const App = () => {
 		setPage(1);
 		paramsObject.set("page", 1);
 		setSearchParamsString(paramsObject.toString());
-	}
+	};
 
 	const handleShowMoreResults = () => {
 		const newPage = page + 1;
@@ -125,7 +125,30 @@ const App = () => {
 		const paramsObject = new URLSearchParams(searchParamsString);
 		paramsObject.set("page", newPage);
 		setSearchParamsString(paramsObject.toString());
-	}
+	};
+
+	const showNotificationBanner = () => {
+		if (selectedOption === "Events" ||selectedOption === "Art") {
+			const link = selectedOption === "Events" ?
+				(<a
+					title={`Search for events ${query && `related to ${query}`}`}
+					href={`https://metmuseum.org/events/whats-on?searchText=${query}`}>
+					Advanced Event Search
+				</a>) :
+				(<a
+					title={`Search our collection ${query && `for ${query}`}`}
+					href={`https://met-collection-search.vercel.app/?q=${query}`}>
+					Advanced Collection Search
+				</a>);
+			return (
+				<section className="gs__notification">
+					Need to refine your search? Use our {link} for more options and filters.
+				</section>
+			);
+		} else {
+			return <section className="gs__notification"/>
+		}
+	};
 	const updateURL = () => {
 		const params = new URLSearchParams(searchParamsString);
 		//Page isn't useful for the user to ever see in their URL.
@@ -174,6 +197,7 @@ const App = () => {
 					)
 				})}
 			</section>
+			{showNotificationBanner()}
 			{results.length > 0 ? (
 				<section className="gs__results">
 					{results.map((result,i) => {

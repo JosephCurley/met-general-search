@@ -48,9 +48,9 @@ const ResultObject = ({result}) => {
 		classString = result.buttonText ? classString.concat(` `, result.buttonText) : classString;
 		classString = result.status === "Past Exhibition" ? classString.concat(` `, `past-exhibition`) : classString;
 		classString = result.bestBet ? classString.concat(` `, `best-bet`) : classString;
-		
 		return classString;
 	};
+	
 	return (
 		<a
 			className={classString()}
