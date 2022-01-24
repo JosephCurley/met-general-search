@@ -177,6 +177,7 @@ const App = () => {
 			<h2 className="gs__sub-title">{query && totalResults ? `${totalResults.toLocaleString()} results for ${query}` : ""}</h2>
 			<SearchBar
 				query={query}
+				selectedOption={selectedOption}
 				onChange={handleSearchQueryChange}
 			/>
 			<section className="gs__facets">
