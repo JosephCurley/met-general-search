@@ -57,7 +57,6 @@ const App = () => {
 				responseData.facets[0].values.sort((a, b) => b.count - a.count);
 				setFacet(responseData.facets[0]);
 				setTotalResults(responseData.totalResults);
-				setPrevQuery(query);
 			}
 			setSelectedOption(responseData.request.searchFacet || defaultSelectedOption);
 		} else {
@@ -94,6 +93,7 @@ const App = () => {
 		} finally {
 			abortController = null;
 			setIsSearching(false);
+			setPrevQuery(query);
 		}
 	}
 
