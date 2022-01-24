@@ -143,6 +143,11 @@ h4 {
 	}
 }
 
+.search-type__wrapper {
+	flex-shrink: 0;
+	min-width: 140px;
+}
+
 .gs__results {
 	display: flex;
 	flex-wrap: wrap;

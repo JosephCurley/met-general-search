@@ -175,12 +175,12 @@ const App = () => {
 			className={mainClasses()}>
 			<h1 className="gs__title">Search / {selectedOption}</h1>
 			<h2 className="gs__sub-title">{query && totalResults ? `${totalResults.toLocaleString()} results for ${query}` : ""}</h2>
-			<SearchBar
-				query={query}
-				selectedOption={selectedOption}
-				onChange={handleSearchQueryChange}
-			/>
-			<section className="gs__facets">
+			<section className="gs__search">
+				<SearchBar
+					query={query}
+					selectedOption={selectedOption}
+					onChange={handleSearchQueryChange}
+				/>
 				<div className="search-type__wrapper gs-select__wrapper">
 					<label
 						className="screen-reader-only"

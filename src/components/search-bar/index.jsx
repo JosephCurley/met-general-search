@@ -5,17 +5,15 @@ import { DebounceInput } from 'react-debounce-input';
 
 const SearchBar = ({onChange, query, selectedOption}) => {
 	return (
-		<section className="gs__search">
-			<DebounceInput
-				className="object-search__input"
-				key="objectSearchBar"
-				placeholder={`Search ${selectedOption}`}
-				debounceTimeout={400}
-				type="search"
-				value={query}
-				onChange={onChange}
-			/>
-		</section>
+		<DebounceInput
+			className="object-search__input"
+			key="objectSearchBar"
+			placeholder={`Search ${selectedOption}`}
+			debounceTimeout={400}
+			type="search"
+			value={query}
+			onChange={onChange}
+		/>
 	)
 };
 
