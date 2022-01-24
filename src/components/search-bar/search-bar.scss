@@ -1,6 +1,6 @@
 .object-search__input {
 	background: linear-gradient(-45deg, $color-green-good-news-400, $color-green-good-news-600, $color-white, $color-white);
-	background-position: 30% 50%;
+	background-position: 25% 50%;
 	background-size: 400% 400%;
 	border: 2px solid currentColor;
 	border-radius: 50px;
@@ -18,14 +18,14 @@
 	}
 
 	.is-searching & {
-		animation: gradient 10s linear infinite;
+		animation: gradient 5s linear infinite;
 	}
 }
 
 
 @keyframes gradient {
 	0% {
-		background-position: 30% 50%;
+		background-position: 25% 50%;
 	}
 
 	50% {
@@ -33,6 +33,6 @@
 	}
 
 	100% {
-		background-position: 30% 50%;
+		background-position: 25% 50%;
 	}
 }

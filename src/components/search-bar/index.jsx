@@ -22,7 +22,6 @@ const SearchBar = ({onChange, query}) => {
 };
 
 SearchBar.propTypes = {
-	selectedField: PropTypes.string,
 	query: PropTypes.string,
 	onChange: PropTypes.func
 }
