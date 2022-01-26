@@ -86,11 +86,11 @@ h4 {
 
 .gs__title {
 	@include typography-h1-expressive();
-	line-height: 1.2;
 	display: block;
 	//Almost $metserif but removing Georiga as fallback
 	font-family: "MetSerif", "Times New Roman", Times, serif;
 	font-size: $textsize-xl;
+	line-height: 1.2;
 	margin-bottom: 0.5em;
 	min-height: 1.2em;
 	overflow: hidden;

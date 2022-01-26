@@ -8,10 +8,10 @@
 	flex-direction: column;
 	overflow: hidden;
 	text-decoration: none;
-	transition: all 0.3s;
+	transition: all 0.15s;
 
 	@media (min-width: $bp-gs) {
-		flex-direction: row;;
+		flex-direction: row;
 	}
 
 	&:hover,
@@ -44,19 +44,25 @@
 		border: 1px solid $color-grey-800;
 		color: $color-white;
 	}
+
+	.is-searching & {
+		background-color: $color-white-050;
+		color: $color-white-050;
+	}
+
+	.is-searching.darkmode & {
+		background-color: $color-grey-800;
+		color: $color-grey-800;
+	}
 }
 
 .gs-result__descriptor {
-	color: $color-grey-800;
 	font-size: $textsize-xs;
 	font-weight: 600;
 	line-height: 1;
 	margin-bottom: $spacing-micro;
 	text-transform: uppercase;
 	
-	.darkmode & {
-		color: $color-white;
-	}
 }
 
 .best-bet__title {
@@ -84,11 +90,14 @@
 	height: auto;
 	max-width: 100%;
 	width: 100%;
-
+	
 	&[src="https://www.metmuseum.org/assets/icons/ico-no-image.svg"] {
 		filter: brightness(0.8);
 	}
 
+	.is-searching & {
+		opacity: 0;
+	}
 
 	.Primer:hover &,
 	.Primer:focus & {
