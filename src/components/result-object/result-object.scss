@@ -1,10 +1,8 @@
 @import "~@metmuseum/marble/src/base/base";
 
 .gs-result {
-	background-color: $color-grey-050;
 	border: 1px solid $color-grey-100;
 	border-radius: 4px;
-	box-shadow: $shadow-passive;
 	display: flex;
 	flex-basis: 100%;
 	flex-direction: column;
@@ -19,7 +17,7 @@
 	&:hover,
 	&:focus {
 		background-color: $color-white-050;
-		box-shadow: $shadow-active;
+		box-shadow: $shadow-passive;
 		outline: none;
 	}
 
@@ -32,8 +30,8 @@
 	} /* stylelint-enable */
 
 	&.best-bet {
-		background-color: $color-grey-900;
-		color: $color-white;
+		background-color: $color-grey-200;
+		//color: $color-white;
 
 		.darkmode & { /* stylelint-disable */
 			background-color: $color-white-050;
@@ -48,23 +46,22 @@
 	}
 }
 
-.best-bet__title {
-	color: #f5deb3;
-	
-	.darkmode & {
-		color: #c28d2a;
-	}
-}
-
 .gs-result__descriptor {
 	color: $color-grey-800;
+	font-size: $textsize-xs;
 	font-weight: 600;
 	line-height: 1;
 	margin-bottom: $spacing-micro;
-	text-transform: capitalize;
+	text-transform: uppercase;
 	
 	.darkmode & {
 		color: $color-white;
+	}
+}
+
+.best-bet__title {
+	.darkmode & {
+		color: $color-grey-900;
 	}
 }
 
@@ -109,8 +106,8 @@
 }
 
 .gs-result__result-title {
+	@include typography-h3();
 	display: inline-block;
-	font-size: $textsize-m;
 	line-height: 1;
 	margin-bottom: $spacing-micro;
 	text-decoration: none;

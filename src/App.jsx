@@ -56,8 +56,8 @@ const App = () => {
 				//Order Facets by result count
 				responseData.facets[0].values.sort((a, b) => b.count - a.count);
 				setFacet(responseData.facets[0]);
-				setTotalResults(responseData.totalResults);
 			}
+			setTotalResults(responseData.totalResults);
 			setSelectedOption(responseData.request.searchFacet || defaultSelectedOption);
 		} else {
 			//For Pages beyond the first, concat them with previously fetched pages.
