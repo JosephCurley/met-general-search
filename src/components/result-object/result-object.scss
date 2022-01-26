@@ -45,12 +45,12 @@
 		color: $color-white;
 	}
 
-	.is-searching & {
+	.is-searching &:not(.best-bet) {
 		background-color: $color-white-050;
 		color: $color-white-050;
 	}
 
-	.is-searching.darkmode & {
+	.is-searching.darkmode &:not(.best-bet) {
 		background-color: $color-grey-800;
 		color: $color-grey-800;
 	}
@@ -95,7 +95,7 @@
 		filter: brightness(0.8);
 	}
 
-	.is-searching & {
+	.is-searching .gs-result:not(.best-bet) & {
 		opacity: 0;
 	}
 
