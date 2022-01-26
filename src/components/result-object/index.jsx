@@ -14,7 +14,7 @@ const ResultObject = ({result}) => {
 	const imageURL= result.image ?
 		result.image.includes("http") ?
 			result.image :
-			`https://metmuseum.org${result.image}` :
+			`https://www.metmuseum.org${result.image}` :
 		`https://www.metmuseum.org/assets/icons/ico-no-image.svg`;
 
 	//Same as above, relative urls, need to be on a "metmuseum" domain
