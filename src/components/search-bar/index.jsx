@@ -11,6 +11,7 @@ const SearchBar = ({onChange, query, selectedOption}) => {
 				key="objectSearchBar"
 				placeholder={`Search ${selectedOption}`}
 				debounceTimeout={400}
+				onKeyDown={event => event.key === 'Enter' && document.activeElement.blur()}
 				type="search"
 				value={query}
 				onChange={onChange}
