@@ -230,19 +230,13 @@ h4 {
 		color: $color-focus-state;
 		opacity: 1;
 		outline: none;
-	}
 
-	.darkmode & { /* stylelint-disable */
-		&:disabled {
-			background-color: $color-white;
+		.darkmode & { /* stylelint-disable */
+			background-color: $color-grey-200;
 			color: $color-grey-900;
-		}
-		&:hover,
-		&:focus {
-			background-color: $color-white-opaque-30;
-			color: $color-white;
-		}
-	} /* stylelint-enable */
+		
+		} /* stylelint-enable */
+	}
 }
 
 .gs__pagination {
