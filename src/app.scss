@@ -181,11 +181,12 @@ h4 {
 	grid-column-gap: $spacing-micro;
 	margin-left: $spacing-component-margin;
 	margin-right: $spacing-component-margin;
+	min-height: calc(1em + 6px); //height of text + padding + border
 	white-space: nowrap;
 	@media (min-width: $bp-gs) {
 		flex-wrap: wrap;
 		margin: 0;
-		white-space: wrap;
+		white-space: normal;
 	}
 }
 
