@@ -144,9 +144,10 @@ h4 {
 }
 
 .gs__results {
-	display: flex;
+	display: grid;
 	flex-wrap: wrap;
-	grid-row-gap: $spacing-xxs;
+	grid-gap: $spacing-xxs;
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 	margin-bottom: $spacing-m;
 	max-width: 100%;
 	min-height: 50vh;

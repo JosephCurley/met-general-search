@@ -10,10 +10,6 @@
 	text-decoration: none;
 	transition: all 0.15s;
 
-	@media (min-width: $bp-gs) {
-		flex-direction: row;
-	}
-
 	&:hover,
 	&:focus {
 		background-color: $color-white-050;
@@ -79,11 +75,6 @@
 	flex-shrink: 0;
 	justify-content: center;
 	width: 100%;
-
-	@media (min-width: 550px) {
-		max-width: 250px;
-		width: 50%;
-	}
 }
 
 .gs-result__image {
