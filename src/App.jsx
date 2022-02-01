@@ -149,18 +149,36 @@ const App = () => {
 			return <section className="gs__notification"/>
 		}
 	};
-	const updateURL = () => {
-		const params = new URLSearchParams(searchParamsString);
+
+	useEffect(() => {
+		const onLocationChange = e => {
+			const newParams = new URLSearchParams(e.target.location.search);
+			console.log(newParams.toString());
+			setSearchParamsString(newParams.toString());
+		}
+		window.addEventListener('popstate', onLocationChange);
+		return () => {
+			window.removeEventListener('popstate', onLocationChange)
+		};
+	}, []);
+	
+	const updateURL = searchParams => {
+		const params = new URLSearchParams(searchParams);
 		//Page isn't useful for the user to ever see in their URL.
 		params.delete("page");
 		params.get("searchFacet") === defaultSelectedOption && params.delete("searchFacet");
 		params.get("q") === "" && params.delete("q");
-		window.history.replaceState({}, '', `${location.pathname}?${params}`);
+
+		if (params.toString() !== window.location.search.slice(1).toString()) {
+			window.history.pushState({}, '', `${location.pathname}?${params}`);
+			const navEvent = new PopStateEvent('popstate');
+			window.dispatchEvent(navEvent);
+		}
 	};
 
 	useEffect(() => {
 		searchCollection();
-		updateURL();
+		updateURL(searchParamsString);
 	}, [searchParamsString]);
 
 	const mainClasses = () => {
