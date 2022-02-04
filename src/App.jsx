@@ -25,6 +25,9 @@ let abortController = null;
 const initialUrl = new URL(`${window.location}`);
 const inititalParams = new URLSearchParams(initialUrl.search.slice(1));
 
+//Only allow visitors to leand on page 1.
+inititalParams.set("page", 1);
+
 // Store initial values to be passed to state
 const initalPramsString = inititalParams.toString();
 const initialQuery = inititalParams.get("q") || "";
@@ -69,7 +72,7 @@ const App = () => {
 		abortController && abortController.abort();
 		abortController = new AbortController();
 	
-		const request = await fetch(`${searchAPI}${searchParamsString}&page=${page}`, { signal: abortController.signal });
+		const request = await fetch(`${searchAPI}${searchParamsString}`, { signal: abortController.signal });
 		const response = await request.json();
 
 		if (response.results) {
@@ -96,14 +99,12 @@ const App = () => {
 
 	const handleSearchQueryChange = event => {
 		setQuery(event.target.value);
-		setPage(1);
-		const paramsObject = new URLSearchParams(searchParamsString);
-		if (event.target.value !== "") {
-			paramsObject.set("q", event.target.value);
-		} else {
-			paramsObject.delete("q");
-		}
 
+		const paramsObject = new URLSearchParams(searchParamsString);
+		paramsObject.set("q", event.target.value);
+
+		setPage(1);
+		paramsObject.set("page", 1);
 		setSearchParamsString(paramsObject.toString());
 	};
 
@@ -111,14 +112,19 @@ const App = () => {
 		setSelectedOption(event.target.value);
 		const paramsObject = new URLSearchParams(searchParamsString);
 		paramsObject.set("searchFacet", event.target.value);
-		paramsObject.get("searchFacet") === defaultSelectedOption && paramsObject.delete("searchFacet");
+
 		setPage(1);
+		paramsObject.set("page", 1);
 		setSearchParamsString(paramsObject.toString());
 	};
 
 	const handleShowMoreResults = () => {
 		const newPage = page + 1;
 		setPage(newPage);
+
+		const paramsObject = new URLSearchParams(searchParamsString);
+		paramsObject.set("page", newPage);
+		setSearchParamsString(paramsObject.toString());
 	};
 
 	const showNotificationBanner = () => {
@@ -145,24 +151,28 @@ const App = () => {
 	};
 
 	useEffect(() => {
-		const onFacetChange = e => {
+		const onLocationChange = e => {
 			const newParams = new URLSearchParams(e.target.location.search);
+			console.log(newParams.toString());
 			setSearchParamsString(newParams.toString());
 		}
-		window.addEventListener('popstate', onFacetChange);
+		window.addEventListener('popstate', onLocationChange);
 		return () => {
-			window.removeEventListener('popstate', onFacetChange)
+			window.removeEventListener('popstate', onLocationChange)
 		};
 	}, []);
 	
 	const updateURL = searchParams => {
 		const params = new URLSearchParams(searchParams);
-		if (params.get("searchFacet") !== new URLSearchParams(window.location.search.slice(1)).get("searchFacet")) {
+		//Page isn't useful for the user to ever see in their URL.
+		params.delete("page");
+		params.get("searchFacet") === defaultSelectedOption && params.delete("searchFacet");
+		params.get("q") === "" && params.delete("q");
+
+		if (params.toString() !== window.location.search.slice(1).toString()) {
 			window.history.pushState({}, '', `${location.pathname}?${params}`);
 			const navEvent = new PopStateEvent('popstate');
 			window.dispatchEvent(navEvent);
-		} else {
-			window.history.replaceState({}, '', `${location.pathname}?${params}`);
 		}
 	};
 
