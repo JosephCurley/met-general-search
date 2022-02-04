@@ -168,6 +168,10 @@ const App = () => {
 
 	useEffect(() => {
 		searchCollection();
+	}, [searchParamsString, page]);
+
+	useEffect(() => {
+		setPage(1);
 		updateURL(searchParamsString);
 	}, [searchParamsString]);
 
